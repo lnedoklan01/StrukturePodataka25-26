@@ -1,10 +1,10 @@
-//Definirati strukturu osoba(ime, prezime, godina roðenja) i napisati program koji :
-//A.dinamièki dodaje novi element na poèetak liste,
-//B.ispisuje listu,
-//C.dinamièki dodaje novi element na kraj liste,
-//D.pronalazi element u listi(po prezimenu),
-//E.briše odreðeni element iz liste,
-//U zadatku se ne smiju koristiti globalne varijable.
+//Prethodnom zadatku dodati funkcije :
+//A.dinamièki dodaje novi element iza odreðenog elementa,
+//B.dinamièki dodaje novi element ispred odreðenog elementa,
+//C.sortira listu po prezimenima osoba,
+//D.upisuje listu u datoteku,
+//E.èita listu iz datoteke.
+
 
 
 
@@ -30,6 +30,12 @@ int printList(Position);
 int addAtEnd(Position);
 Position findBySurname(Position, char*);
 int deleteBySurname(Position, char*);
+int addAfter(Position head);
+int addBefore(Position head);
+int sortList(Position head);
+int readFromFile(Position head, const char* filename);
+int writeToFile(Position first, const char* filename);
+
 
 int main() {
 	Person head = {
@@ -55,6 +61,11 @@ int menu(Position head) {
 		printf("4-Find by surname\n");
 		printf("5-Delete by surname\n");
 		printf("6-Exit the program!\n");
+		printf("7-Add after person\n");
+		printf("8-Add before person\n");
+		printf("9-Sort list by surname\n");
+		printf("10-Save list to file\n");
+		printf("11-Read list from file\n");
 
 		printf("Your choice is: ");
 		scanf("%d", &choice);
@@ -103,6 +114,22 @@ int menu(Position head) {
 		case 6:
 			printf("Izlaz iz programa!");
 			return 0;
+		case 7:
+			addAfter(head);
+			break;
+		case 8:
+			addBefore(head);
+			break;
+		case 9:
+			sortList(head);
+			printList(head->next);
+			break;
+		case 10:
+			writeToFile(head->next, "osobe.txt");
+			break;
+		case 11:
+			readFromFile(head, "osobe.txt");
+			break;
 		default:
 			printf("Krivi unos, pokusajte ponovno!\n");
 		}
@@ -190,4 +217,147 @@ int deleteBySurname(Position head, char* surname) {
 	curr->next = NULL;
 	free(curr);
 	return 1;
+}
+
+int addAfter(Position head) {
+	char surname[MAX_SIZE];
+	printf("Unesite prezime osobe iza koje zelite dodati novu osobu: ");
+	scanf("%s", surname);
+
+	Position found = findBySurname(head->next, surname);
+	if (!found) {
+		printf("Osoba s prezimenom %s nije pronadena!\n", surname);
+		return 0;
+	}
+
+	Position newPerson = (Position)malloc(sizeof(Person));
+	if (!newPerson) {
+		printf("Greska pri alokaciji memorije!\n");
+		return CAN_NOT_ALLOCATE_MEMMORY;
+	}
+
+	printf("Unesite ime nove osobe: ");
+	scanf("%s", newPerson->name);
+	printf("Unesite prezime nove osobe: ");
+	scanf("%s", newPerson->surname);
+	printf("Unesite godinu rodenja: ");
+	scanf("%d", &newPerson->birth_year);
+
+	newPerson->next = found->next;
+	found->next = newPerson;
+
+	return 0;
+}
+
+int addBefore(Position head) {
+	char surname[MAX_SIZE];
+	printf("Unesite prezime osobe ispred koje zelite dodati novu osobu: ");
+	scanf("%s", surname);
+
+	Position prev = head;
+	while (prev->next != NULL && strcmp(prev->next->surname, surname) != 0) {
+		prev = prev->next;
+	}
+
+	if (prev->next == NULL) {
+		printf("Osoba s prezimenom %s nije pronadena!\n", surname);
+		return 0;
+	}
+
+	Position newPerson = (Position)malloc(sizeof(Person));
+	if (!newPerson) {
+		printf("Greska pri alokaciji memorije!\n");
+		return CAN_NOT_ALLOCATE_MEMMORY;
+	}
+
+	printf("Unesite ime nove osobe: ");
+	scanf("%s", newPerson->name);
+	printf("Unesite prezime nove osobe: ");
+	scanf("%s", newPerson->surname);
+	printf("Unesite godinu rodenja: ");
+	scanf("%d", &newPerson->birth_year);
+
+	newPerson->next = prev->next;
+	prev->next = newPerson;
+
+	return 0;
+}
+int sortList(Position head) {
+	if (head->next == NULL || head->next->next == NULL) {
+		printf("Lista ima manje od 2 elementa, nije potrebno sortiranje!\n");
+		return 0;
+	}
+
+	Position end = NULL;
+	Position j = NULL;
+	Position prev = NULL;
+	Position temp = NULL;
+
+	while (head->next != end) {
+		prev = head;
+		j = head->next;
+		while (j->next != end) {
+			if (strcmp(j->surname, j->next->surname) > 0) {
+				// zamjena èvorova
+				temp = j->next;
+				j->next = temp->next;
+				temp->next = j;
+				prev->next = temp;
+				j = temp;
+			}
+			prev = j;
+			j = j->next;
+		}
+		end = j;
+	}
+	printf("Lista je sortirana po prezimenima!\n");
+	return 0;
+}
+int readFromFile(Position head, const char* filename) {
+	FILE* fp = fopen(filename, "r");
+	if (!fp) {
+		printf("Greska pri otvaranju datoteke!\n");
+		return -1;
+	}
+
+	while (!feof(fp)) {
+		Position newPerson = (Position)malloc(sizeof(Person));
+		if (!newPerson) {
+			printf("Greska pri alokaciji memorije!\n");
+			fclose(fp);
+			return CAN_NOT_ALLOCATE_MEMMORY;
+		}
+		if (fscanf(fp, "%s %s %d", newPerson->name, newPerson->surname, &newPerson->birth_year) == 3) {
+			newPerson->next = NULL;
+
+			Position temp = head;
+			while (temp->next != NULL)
+				temp = temp->next;
+			temp->next = newPerson;
+		}
+		else {
+			free(newPerson);
+			break;
+		}
+	}
+
+	fclose(fp);
+	printf("Lista je uspjesno ucitana iz datoteke '%s'.\n", filename);
+	return 0;
+}
+int writeToFile(Position first, const char* filename) {
+	FILE* fp = fopen(filename, "w");
+	if (!fp) {
+		printf("Greska pri otvaranju datoteke!\n");
+		return -1;
+	}
+
+	while (first != NULL) {
+		fprintf(fp, "%s %s %d\n", first->name, first->surname, first->birth_year);
+		first = first->next;
+	}
+
+	fclose(fp);
+	printf("Lista je uspjesno upisana u datoteku '%s'.\n", filename);
+	return 0;
 }

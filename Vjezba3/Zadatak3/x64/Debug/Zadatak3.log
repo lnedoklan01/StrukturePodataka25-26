@@ -1,0 +1,4 @@
+﻿  Source.c
+C:\Users\LukaNedoklan\Desktop\SP25-26\Vjezba3\Zadatak3\Source.c(162,3): warning C4033: 'printList' must return a value
+C:\Users\LukaNedoklan\Desktop\SP25-26\Vjezba3\Zadatak3\Source.c(171): warning C4715: 'printList': not all control paths return a value
+  Zadatak3.vcxproj -> C:\Users\LukaNedoklan\Desktop\SP25-26\Vjezba3\x64\Debug\Zadatak3.exe

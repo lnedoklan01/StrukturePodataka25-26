@@ -1,0 +1,6 @@
+﻿  Source.c
+C:\Users\LukaNedoklan\Desktop\SP25-26\Vjezba5\Zadatak5\Zadatak5\Source.c(92,27): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
+C:\Users\LukaNedoklan\Desktop\SP25-26\Vjezba5\Zadatak5\Zadatak5\Source.c(93,27): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
+C:\Users\LukaNedoklan\Desktop\SP25-26\Vjezba5\Zadatak5\Zadatak5\Source.c(94,27): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
+C:\Users\LukaNedoklan\Desktop\SP25-26\Vjezba5\Zadatak5\Zadatak5\Source.c(100,21): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
+  Zadatak5.vcxproj -> C:\Users\LukaNedoklan\Desktop\SP25-26\Vjezba5\Zadatak5\Debug\Zadatak5.exe

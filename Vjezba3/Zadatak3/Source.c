@@ -33,8 +33,8 @@ int deleteBySurname(Position, char*);
 int addAfter(Position head);
 int addBefore(Position head);
 int sortList(Position head);
-int readFromFile(Position head, const char* filename);
-int writeToFile(Position first, const char* filename);
+int readFromFile(Position head,char* filename);
+int writeToFile(Position first,char* filename);
 
 
 int main() {
@@ -218,7 +218,7 @@ int deleteBySurname(Position head, char* surname) {
 	free(curr);
 	return 1;
 }
-
+//dodaje osobu nakon trazene osobe
 int addAfter(Position head) {
 	char surname[MAX_SIZE];
 	printf("Unesite prezime osobe iza koje zelite dodati novu osobu: ");
@@ -249,6 +249,7 @@ int addAfter(Position head) {
 	return 0;
 }
 
+//dodaje osobu prije trazene osobe
 int addBefore(Position head) {
 	char surname[MAX_SIZE];
 	printf("Unesite prezime osobe ispred koje zelite dodati novu osobu: ");
@@ -282,6 +283,7 @@ int addBefore(Position head) {
 
 	return 0;
 }
+//sortira listu po prezimenima
 int sortList(Position head) {
 	if (head->next == NULL || head->next->next == NULL) {
 		printf("Lista ima manje od 2 elementa, nije potrebno sortiranje!\n");
@@ -313,7 +315,8 @@ int sortList(Position head) {
 	printf("Lista je sortirana po prezimenima!\n");
 	return 0;
 }
-int readFromFile(Position head, const char* filename) {
+//citanje iz filea
+int readFromFile(Position head,char* filename) {
 	FILE* fp = fopen(filename, "r");
 	if (!fp) {
 		printf("Greska pri otvaranju datoteke!\n");
@@ -345,7 +348,8 @@ int readFromFile(Position head, const char* filename) {
 	printf("Lista je uspjesno ucitana iz datoteke '%s'.\n", filename);
 	return 0;
 }
-int writeToFile(Position first, const char* filename) {
+//pisanje u file
+int writeToFile(Position first,char* filename) {
 	FILE* fp = fopen(filename, "w");
 	if (!fp) {
 		printf("Greska pri otvaranju datoteke!\n");

@@ -12,9 +12,9 @@ typedef struct treeNode* Position;
 
 /* Struktura èvora binarnog stabla pretraživanja */
 struct treeNode {
-    int value;          /* Vrijednost u èvoru */
-    Position left;      /* Lijevo dijete */
-    Position right;     /* Desno dijete */
+    int value;          
+    Position left;      
+    Position right;     
 };
 
 typedef struct treeNode TreeNode;

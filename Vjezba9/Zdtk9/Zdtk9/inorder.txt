@@ -1,0 +1,4 @@
+INORDER nakon umetanja:
+18 27 41 49 61 63 
+INORDER nakon replace:
+0 18 45 210 0 61 
